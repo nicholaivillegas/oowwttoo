@@ -2,11 +2,8 @@ package com.villegapps.owto;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -88,13 +85,17 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_owto) {
-            Toast.makeText(this, "Owto Screen", Toast.LENGTH_SHORT).show();
+        if (id == R.id.nav_payment) {
+            Toast.makeText(this, "Payment", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_history) {
             Toast.makeText(this, "History", Toast.LENGTH_SHORT).show();
+        }else if (id == R.id.nav_schedule) {
+            Toast.makeText(this, "Schedule", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_notifications) {
             Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_emergency) {
+            Toast.makeText(this, "Emergency", Toast.LENGTH_SHORT).show();
+        }else if (id == R.id.nav_share) {
             Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_help) {
             Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
@@ -118,11 +119,10 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng charbel = new LatLng(14.680589, 121.031829);
         mMap.addMarker(new MarkerOptions().position(charbel).title("Marker in St. Charbel"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(charbel));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15.0f);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(17.0f);
 
         mMap.animateCamera(zoom);
     }
