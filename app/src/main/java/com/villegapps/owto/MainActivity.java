@@ -191,12 +191,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void switchFragment(Fragment fragment) {
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.content_main, fragment);
-        transaction.commit();
-    }
+//    private void switchFragment(Fragment fragment) {
+//        FragmentManager manager = getSupportFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.replace(R.id.content_main, fragment);
+//        transaction.commit();
+//    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
