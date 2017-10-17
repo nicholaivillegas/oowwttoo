@@ -29,6 +29,7 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/edit_pickup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_map_rectangle"
@@ -45,6 +46,7 @@
             android:src="@color/colorPrimaryDark" />
 
         <EditText
+            android:id="@+id/edit_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_map_rectangle"
