@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,6 +48,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.villegapps.owto.fragment.HistoryFragment;
+import com.villegapps.owto.fragment.NotificationFragment;
+import com.villegapps.owto.fragment.PaymentFragment;
+import com.villegapps.owto.fragment.ScheduledTripsFragment;
+import com.villegapps.owto.fragment.SettingsFragment;
 
 import java.io.IOException;
 import java.util.List;
@@ -73,7 +79,7 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.image_pin)
     ImageView imagePin;
     @Bind(R.id.content_main)
-    RelativeLayout contentMain;
+    FrameLayout contentMain;
     @Bind(R.id.nav_view)
     NavigationView navView;
     @Bind(R.id.drawer_layout)
@@ -86,8 +92,16 @@ public class MainActivity extends AppCompatActivity
     private double currentLongitude;
     private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
+    private HistoryFragment historyFragment;
+    private NotificationFragment notificationFragment;
+    private PaymentFragment paymentFragment;
+    private ScheduledTripsFragment scheduledTripsFragment;
+    private SettingsFragment settingsFragment;
+
     Marker currLocationMarker;
     LatLng latLng;
+
+    private String currentFragment = "home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +109,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        historyFragment = new HistoryFragment();
+        notificationFragment = new NotificationFragment();
+        paymentFragment = new PaymentFragment();
+        scheduledTripsFragment = new ScheduledTripsFragment();
+        settingsFragment = new SettingsFragment();
+
         setSupportActionBar(toolbar);
         requestCoarseLocation();
         requestFineLocation();
@@ -169,21 +190,45 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_payment) {
-            Toast.makeText(this, "Payment", Toast.LENGTH_SHORT).show();
+            if (currentFragment != "payment") {
+                currentFragment = "payment";
+                Toast.makeText(this, "Payment", Toast.LENGTH_SHORT).show();
+                switchFragment(paymentFragment);
+            }
         } else if (id == R.id.nav_history) {
-            Toast.makeText(this, "History", Toast.LENGTH_SHORT).show();
+            if (currentFragment != "history") {
+                currentFragment = "history";
+                Toast.makeText(this, "History", Toast.LENGTH_SHORT).show();
+                switchFragment(historyFragment);
+            }
         } else if (id == R.id.nav_schedule) {
-            Toast.makeText(this, "Schedule", Toast.LENGTH_SHORT).show();
+            if (currentFragment != "schedule") {
+                currentFragment = "schedule";
+                Toast.makeText(this, "Schedule", Toast.LENGTH_SHORT).show();
+                switchFragment(scheduledTripsFragment);
+            }
         } else if (id == R.id.nav_notifications) {
-            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_emergency) {
-            Toast.makeText(this, "Emergency", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_share) {
-            Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_help) {
-            Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_drive) {
-            Toast.makeText(this, "Drive", Toast.LENGTH_SHORT).show();
+            if (currentFragment != "notifications") {
+                currentFragment = "notifications";
+                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show();
+                switchFragment(notificationFragment);
+            }
+        } else if (id == R.id.nav_settings) {
+            if (currentFragment != "settings") {
+                currentFragment = "settings";
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                switchFragment(settingsFragment);
+            }
+        } else if (id == R.id.nav_home) {
+            if (currentFragment != "home") {
+                currentFragment = "home";
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+                getSupportFragmentManager().beginTransaction().remove(paymentFragment).commit();
+                getSupportFragmentManager().beginTransaction().remove(historyFragment).commit();
+                getSupportFragmentManager().beginTransaction().remove(scheduledTripsFragment).commit();
+                getSupportFragmentManager().beginTransaction().remove(notificationFragment).commit();
+                getSupportFragmentManager().beginTransaction().remove(settingsFragment).commit();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -191,22 +236,20 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-//    private void switchFragment(Fragment fragment) {
-//        FragmentManager manager = getSupportFragmentManager();
-//        FragmentTransaction transaction = manager.beginTransaction();
-//        transaction.replace(R.id.content_main, fragment);
-//        transaction.commit();
-//    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-//        LatLng charbel = new LatLng(14.680589, 121.031829);
-//        mMap.addMarker(new MarkerOptions().position(charbel).title("Marker in St. Charbel"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(charbel));
-//        CameraUpdate zoom = CameraUpdateFactory.zoomTo(17.0f);
-//        mMap.animateCamera(zoom);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
         mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
@@ -328,7 +371,6 @@ public class MainActivity extends AppCompatActivity
                  */
             Log.e("Error", "Location services connection failed with code " + connectionResult.getErrorCode());
         }
-
     }
 
     @Override
@@ -342,7 +384,6 @@ public class MainActivity extends AppCompatActivity
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         currLocationMarker = mMap.addMarker(markerOptions);
-
     }
 
     @Override
@@ -356,7 +397,6 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         Log.v(this.getClass().getSimpleName(), "onPause()");
-
         //Disconnect from API onPause()
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -384,5 +424,12 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     1);
         }
+    }
+
+    private void switchFragment(Fragment fragment) {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.content_main, fragment);
+        transaction.commit();
     }
 }
