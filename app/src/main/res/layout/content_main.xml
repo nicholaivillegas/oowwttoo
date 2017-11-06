@@ -66,7 +66,7 @@
             android:id="@+id/linear_eta_and_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/linear_book"
+            android:layout_above="@+id/linear_payment_and_promo"
             android:layout_alignEnd="@+id/linear_book"
             android:layout_alignStart="@+id/linear_book"
             android:layout_marginBottom="5dp"
@@ -103,6 +103,46 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linear_payment_and_promo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/linear_book"
+            android:layout_alignEnd="@+id/linear_book"
+            android:layout_alignStart="@+id/linear_book"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/rounded_map_rectangle"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/text_payment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_account_balance_wallet_black_18dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Cash"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/text_promo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_receipt_black_18dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="OWTO100" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear_book"
